@@ -24,6 +24,13 @@ namespace PreAsso.Bussiness
             "Acid uric"
         };
 
+        /// <summary>
+        /// building data for Association rules
+        /// </summary>
+        /// <param name="dataFolderPath">folder of data</param>
+        /// <param name="excelFileName">excel data file</param>
+        /// <param name="arffFileName">arff file name to save</param>
+        /// <param name="thres">threshold of ratio</param>
         public void PrepareForAr(string dataFolderPath, string excelFileName, string arffFileName, double thres)
         {
             try
@@ -196,6 +203,13 @@ namespace PreAsso.Bussiness
             }
         }
 
+        /// <summary>
+        /// convert value to norminal value
+        /// </summary>
+        /// <param name="value">value of feature</param>
+        /// <param name="type">feature name</param>
+        /// <param name="isMale">male or female</param>
+        /// <returns>value of feature in norminal form</returns>
         private string ConvertToNominal(double value, string type, bool isMale = true)
         {
             var result = "";

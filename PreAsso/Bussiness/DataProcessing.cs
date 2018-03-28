@@ -9,10 +9,16 @@ namespace PreAsso.Bussiness
 {
     public class DataProcessing
     {
+        /// <summary>
+        ///     Preprocessing data
+        /// </summary>
+        /// <param name="excelFileName">excel data file</param>
+        /// <param name="thres">threshold of ratio</param>
+        /// <returns>return header of arff file</returns>
         public static List<string> Processing(string excelFileName, double thres)
         {
             var features = new List<FeatureEntity>();
-            List<string> lines = new List<string>();
+            var lines = new List<string>();
 
             try
             {
@@ -77,7 +83,7 @@ namespace PreAsso.Bussiness
                         if (ignoreList.Contains(feature.Name)) continue;
                         feature.PercentCalculating(rows - 1);
                         if (feature.Percent < thres) continue;
-                        string line = "@ATTRIBUTE\t" + Regex.Replace(feature.Name.Replace(",", ""), "\\s+", "_") + "\t{";
+                        var line = "@ATTRIBUTE\t" + Regex.Replace(feature.Name.Replace(",", ""), "\\s+", "_") + "\t{";
                         if (feature.Name == "Acid uric" || feature.Name == "Huyết áp ngưỡng thấp (mmHg)"
                             || feature.Name == "Huyết áp ngưỡng cao (mmHg)")
                         {
