@@ -1,0 +1,38 @@
+﻿Hồi_Sức_Cấp_Cứu Nội_-_Hồi_Sức_Cấp_Cứu HỒI_SỨC_TÍCH_CỰC_-_CHỐNG_ĐỘC HSCC HỒI_SỨC_TÍCH_CỰC_CHỐNG_ĐỘC HSTC-CĐ Hồi_sức
+kho_noi Nội NỘI Nội_tổng_hợp KHOA_NỘI_TỔNG_HỢP KHOA_NÔI_TỔNG_HỢP NỘI_B NỘI_A NỘI_TH NỘI_TỔNG_HỢP nội noi NÔI_TỔNG_HỢP NỌI_TỔNG_HỢP Nọi Nội_-_Hồi_sức_cấp_cứu Nôi nôi Nội Nội_B Nội_A Nội_A 
+TIM_MẠCH Tim_mạch TIM_MẠCH Tim_mạch TM
+NGOẠI_TỔNG_HỢP 
+MẮT
+MÃN_TÍNH PK_MÃN_TÍNH Phòng_khám_Mãn_tính Mãn_tính PK_Mãn_Tính KH_Mãn_Tính PK_Mãn_tính PK_mãn_tính PKMT Mãn_Tính_1 PKMT1 Pkmt PK_mãm_tính PK_Mãn_tính_1 PK_MT Mãn_tính Pkmt2 PKmt Nội_TH
+KB Khám_bệnh 
+Cấp_cứu
+Nông_dân Nông_Dân
+Nghỉ_Hưu Cán_bộ_hưu
+Cán_Bộ Cán_bộ
+Học_sinh Học_Sinh
+Benh_vien_da_khoa_huyen_Yen_Chau
+Bệnh_viện_đa_khoa_Mộc_Châu Bệnh_viên_đa_khoa_Mộc_Châu
+BỆNH_VIỆN_ĐA_KHOA_HUYỆN_MAI_SƠN Bệnh_viện_đa_khoa_huyện_mai_sơn BVDK_MAI_SƠN BVĐK_MAI_SƠN BVMS
+Bệnh_viện_đa_khoa_Tỉnh_Sơn_La BỆNH_VIỆN_ĐA_KHOA_SƠN_LA BỆNH_VIỆN_ĐA_KHOA_TỈNH_SƠN_LA BVĐKTỈNH_SƠN_LA BVĐK_TỈNH_SƠN_LA BVĐK_TỈNH_SƠN_LA BVĐK_Sơn_La BVĐK_TINH_SƠN_LA BVDDK_TỈNH_SƠN_LA BVĐK_TỈNH_SƯƠN_LA Nhẫn_BVĐK_Sơn_La Nhẫn_-_BVĐK_Sơn_La T_ĐK_Tỉnh_Sơn_La T__ĐK_Tỉnh_Sơn_La Nhẫn_BVĐK_SƠN_LA Nhẫn_BVVĐK_SƠN_LA T_ĐK_Tinhr_Sơn_La Nhân_BVĐK_SƠN_LA T_ĐK_Tỉnh_Sơn_La Nhẫn_NVĐK_SƠN_LA Nhẫn_BVDDK_Sơn_La Nhẫn__BVĐK_Sơn_La T_ĐK_Tỉnh_Sơn_Ka Nhẫn-BVĐK_SƠN_LA T_ĐKT_Sơn_La T_ĐKTSơn_la T-ĐKT_Sơn_La
+BVĐK BVDK Nhẫn_BVĐK
+BVĐK_huyện_thuận_châu BVĐK_huyện_Thuận_Châu BVK_huyện_thuận_châu BVDDK_huyện_thuận_châu BVĐk_huyện_thuận_châu BVĐK_Huyện_thuận_châu BVDK_huyện_thuận_châu bvđk_huyện_thuận_châu
+bệnh_viện_đa_khoa_huyện_Mường_La
+Nữ Nữ
+nong_dan LÀM_RUỘNG nông_dân NÔNG_DÂN Nông_dân Làm_nương Làm_ruộng làm_ruộng Nông_Dân Nông
+Nhân_dân ND Nhân_Dân
+CBH Hưu CB_Hưu cán_bộ_hưu hưu_trí Hưu_trí Cán_bộ_hưu Cán_bộ_Hưu
+cán_bộ CB Cán_bộ Cán_Bộ Cán_bộ
+CN CÔNG_NHÂN 
+HỌC_SINH Học_sinh
+Cựu_chiến_binh
+Bác_sĩ
+CH
+Công_an
+Giáo_viên
+son_la Sơn_La SƠN_LA Sơn_la sơn_la SƠn_la SƠn_La
+TUYÊN_QUANG
+HẢI_PHÒNG 
+Thuận_Châu
+Phú_Thọ
+Lào
+Hà_Nam

@@ -21,6 +21,7 @@ namespace PreAsso.Bussiness
             "Ure",
             "Creatinin",
             "Glucose máu",
+            "Chỉ số Glucose máu (GM)",
             "Acid uric"
         };
 
@@ -281,6 +282,14 @@ namespace PreAsso.Bussiness
                         result = "cao";
                     else
                         result = "bình_thường";
+                    break;
+                case "Chỉ số Glucose máu (GM)":
+                    if (value < 5.6)
+                        result = "bình_thường";
+                    else if (value <= 6.9)
+                        result = "tiền_đái_tháo_đường";
+                    else
+                        result = "đái_tháo_đường";
                     break;
             }
 

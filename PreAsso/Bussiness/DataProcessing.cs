@@ -24,9 +24,10 @@ namespace PreAsso.Bussiness
             {
                 using (var pck = new ExcelPackage(new FileInfo(excelFileName)))
                 {
-                    var sheet = pck.Workbook.Worksheets.Count > 1
-                        ? pck.Workbook.Worksheets[2]
-                        : pck.Workbook.Worksheets[1];
+//                    var sheet = pck.Workbook.Worksheets.Count > 1
+//                        ? pck.Workbook.Worksheets[2]
+//                        : pck.Workbook.Worksheets[1];
+                    var sheet = pck.Workbook.Worksheets[1];
                     var rows = sheet.Dimension.Rows;
                     var cols = sheet.Dimension.Columns;
 
@@ -72,8 +73,17 @@ namespace PreAsso.Bussiness
                         "Dấu thời gian",
                         "Nơi làm việc",
                         "2. Khám các bộ phận",
+                        "2. Khám bộ phận",
+                        "13. Glucose máu (GM)",
+                        "Họ và tên",
+                        "Mã bệnh nhân (nếu có)",
+                        "* Diễn giải mục 1",
                         "* Diễn giải mục 7",
-                        "* Diễn giải mục 8"
+                        "* Diễn giải mục 8",
+                        "Cân nặng (Kg)",
+                        "* Diễn giải mục 14",
+                        "* Diễn giải mục 15",
+                        "Địa chỉ"
                     };
 
                     lines.Add("@RELATION\tmedical\r\n");
@@ -88,6 +98,10 @@ namespace PreAsso.Bussiness
                             || feature.Name == "Huyết áp ngưỡng cao (mmHg)")
                         {
                             line += "bình_thường,cao";
+                        }
+                        else if (feature.Name == "Chỉ số Glucose máu (GM)")
+                        {
+                            line += "bình_thường,tiền_đái_tháo_đường,đái_tháo_đường";
                         }
                         else if (numberList.Contains(feature.Name))
                         {
