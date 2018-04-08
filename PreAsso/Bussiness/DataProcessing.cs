@@ -19,6 +19,16 @@ namespace PreAsso.Bussiness
         {
             var features = new List<FeatureEntity>();
             var lines = new List<string>();
+            var meanLines = File.ReadAllLines("same mean.txt");
+            var sameMeans = new List<List<string>>();
+            var means = new List<string>();
+
+            foreach (var line in meanLines)
+            {
+                var elements = Regex.Split(line, "\\s+");
+                means.Add(elements[0]);
+                sameMeans.Add(new List<string>(elements));
+            }
 
             try
             {
@@ -111,7 +121,13 @@ namespace PreAsso.Bussiness
                         {
                             var count = 0;
                             foreach (var value in feature.ValueList)
-                                line += (count++ == 0 ? "" : ",") + Regex.Replace(value, "\\s+", "_");
+                            {
+                                var v = Regex.Replace(value, "\\s+", "_");
+                                var index = findSameMeans(v, sameMeans);
+                                v = index != -1 ? means[index] : v;
+                                if (!line.Contains(v))
+                                    line += (count++ == 0 ? "" : ",") + v;
+                            }
                         }
                         line += "}";
                         lines.Add(line);
@@ -124,6 +140,20 @@ namespace PreAsso.Bussiness
             }
 
             return lines;
+        }
+
+        public static int findSameMeans(string v, List<List<string>> sameMeans)
+        {
+            var index = -1;
+
+            for (var i = 0; i < sameMeans.Count; i++)
+                if (sameMeans[i].Contains(v))
+                {
+                    index = i;
+                    break;
+                }
+
+            return index;
         }
     }
 }

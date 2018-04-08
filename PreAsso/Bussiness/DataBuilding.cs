@@ -26,7 +26,7 @@ namespace PreAsso.Bussiness
         };
 
         /// <summary>
-        /// building data for Association rules
+        ///     building data for Association rules
         /// </summary>
         /// <param name="dataFolderPath">folder of data</param>
         /// <param name="excelFileName">excel data file</param>
@@ -40,6 +40,17 @@ namespace PreAsso.Bussiness
                 {
                     var dataPrinter = new StreamWriter(arffFileName);
                     var headerContent = DataProcessing.Processing(excelFileName, thres);
+                    var meanLines = File.ReadAllLines("same mean.txt");
+                    var sameMeans = new List<List<string>>();
+                    var means = new List<string>();
+
+                    foreach (var line in meanLines)
+                    {
+                        var elements = Regex.Split(line, "\\s+");
+                        means.Add(elements[0]);
+                        sameMeans.Add(new List<string>(elements));
+                    }
+
                     var headerList = new List<string>();
                     var headerRegex = "\t(.+)\t";
                     foreach (var line in headerContent)
@@ -51,9 +62,10 @@ namespace PreAsso.Bussiness
 
                     dataPrinter.WriteLine("@Data");
 
-                    var sheet = pck.Workbook.Worksheets.Count > 1
-                        ? pck.Workbook.Worksheets[2]
-                        : pck.Workbook.Worksheets[1];
+//                    var sheet = pck.Workbook.Worksheets.Count > 1
+//                        ? pck.Workbook.Worksheets[2]
+//                        : pck.Workbook.Worksheets[1];
+                    var sheet = pck.Workbook.Worksheets[1];
                     var rows = sheet.Dimension.Rows;
                     var cols = sheet.Dimension.Columns;
                     var cells = sheet.Cells;
@@ -181,9 +193,16 @@ namespace PreAsso.Bussiness
                                 try
                                 {
                                     if (value.Length == 0)
+                                    {
                                         prepareLine += ",?";
+                                    }
                                     else
-                                        prepareLine += "," + Regex.Replace(value, "\\s+", "_");
+                                    {
+                                        value = Regex.Replace(value, "\\s+", "_");
+                                        var index = DataProcessing.findSameMeans(value, sameMeans);
+                                        value = index != -1 ? means[index] : value;
+                                        prepareLine += "," + value;
+                                    }
                                 }
                                 catch (Exception e)
                                 {
@@ -205,7 +224,7 @@ namespace PreAsso.Bussiness
         }
 
         /// <summary>
-        /// convert value to norminal value
+        ///     convert value to norminal value
         /// </summary>
         /// <param name="value">value of feature</param>
         /// <param name="type">feature name</param>
