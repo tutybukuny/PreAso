@@ -58,5 +58,36 @@ namespace PreAsso
                 }
             }
         }
+
+        private void btnPre_Click(object sender, EventArgs e)
+        {
+            var excelFile = txtBrowse.Text;
+            if (excelFile.Length == 0)
+            {
+                MessageBox.Show("Please choose an excel file");
+            }
+            else
+            {
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    Title = "Save dat Files",
+                    CheckPathExists = true,
+                    DefaultExt = "dat",
+                    Filter = "Text files (*.dat)|*.dat|All files (*.*)|*.*",
+                    RestoreDirectory = true,
+                    AddExtension = true
+                };
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    double thres = cbbThres.SelectedIndex == 0 ? 50 : 70;
+                    var building = new DataBuilding();
+                    building.Prepare(Path.GetDirectoryName(excelFile), excelFile,
+                        dialog.FileName, thres);
+
+                    MessageBox.Show("Done");
+                }
+            }
+        }
     }
 }

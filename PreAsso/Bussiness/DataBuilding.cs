@@ -25,6 +25,8 @@ namespace PreAsso.Bussiness
             "Acid uric"
         };
 
+        #region Association rules
+
         /// <summary>
         ///     building data for Association rules
         /// </summary>
@@ -39,7 +41,7 @@ namespace PreAsso.Bussiness
                 using (var pck = new ExcelPackage(new FileInfo(excelFileName)))
                 {
                     var dataPrinter = new StreamWriter(arffFileName);
-                    var headerContent = DataProcessing.Processing(excelFileName, thres);
+                    var headerContent = DataProcessing.Processing(dataFolderPath, excelFileName, thres);
                     var meanLines = File.ReadAllLines("same mean.txt");
                     var sameMeans = new List<List<string>>();
                     var means = new List<string>();
@@ -62,9 +64,6 @@ namespace PreAsso.Bussiness
 
                     dataPrinter.WriteLine("@Data");
 
-//                    var sheet = pck.Workbook.Worksheets.Count > 1
-//                        ? pck.Workbook.Worksheets[2]
-//                        : pck.Workbook.Worksheets[1];
                     var sheet = pck.Workbook.Worksheets[1];
                     var rows = sheet.Dimension.Rows;
                     var cols = sheet.Dimension.Columns;
@@ -315,26 +314,38 @@ namespace PreAsso.Bussiness
             return result;
         }
 
-        #region Hide
+        #endregion
 
-        public void Prepare(string dataFolderPath, string excelFileName, string dicFileName, string featureNamesFile)
+        #region The others
+
+        public void Prepare(string dataFolderPath, string excelFileName, string dataFileName, double thres)
         {
             try
             {
-                using (var pck = new ExcelPackage(new FileInfo(dataFolderPath + excelFileName)))
+                DataProcessing.Processing(dataFolderPath, excelFileName, thres, false);
+                var meanLines = File.ReadAllLines("same mean.txt");
+                var sameMeans = new List<List<string>>();
+                var means = new List<string>();
+
+                foreach (var line in meanLines)
                 {
-                    var preparePrinter = new StreamWriter(dataFolderPath + excelFileName + " prepare.txt");
-                    var dicContents = File.ReadAllLines(dataFolderPath + dicFileName).Where(l => l.Length > 0).ToList();
+                    var elements = Regex.Split(line, "\\s+");
+                    means.Add(elements[0]);
+                    sameMeans.Add(new List<string>(elements));
+                }
+                using (var pck = new ExcelPackage(new FileInfo(excelFileName)))
+                {
+                    var preparePrinter = new StreamWriter(dataFolderPath + "/prepare.txt");
+                    var dicContents = File.ReadAllLines(dataFolderPath + "/dictionary.txt").Where(l => l.Length > 0)
+                        .ToList();
                     var dic = new Dictionary<string, int>();
                     foreach (var content in dicContents)
                     {
                         var arr = content.Split('\t');
                         dic.Add(arr[0], int.Parse(arr[1]));
                     }
-                    var featureNames = File.ReadAllText(dataFolderPath + featureNamesFile);
-                    var sheet = pck.Workbook.Worksheets.Count > 1
-                        ? pck.Workbook.Worksheets[2]
-                        : pck.Workbook.Worksheets[1];
+                    var featureNames = File.ReadAllText(dataFolderPath + "/featureNamePrinter.txt");
+                    var sheet = pck.Workbook.Worksheets[1];
                     var rows = sheet.Dimension.Rows;
                     var cols = sheet.Dimension.Columns;
                     var cells = sheet.Cells;
@@ -362,7 +373,6 @@ namespace PreAsso.Bussiness
                                 }
                                 else
                                 {
-                                    var cell = cells[i, 12];
                                     try
                                     {
                                         nowStr = cells[i, 12].Value.ToString().Trim();
@@ -410,6 +420,27 @@ namespace PreAsso.Bussiness
                                     lost = true;
                                 continue;
                             }
+                            if (featureName == "Chỉ_số_Glucose_máu_(GM)")
+                            {
+                                if (value.Length > 0)
+                                {
+                                    var v = double.Parse(value);
+                                    if (v < 5.6)
+                                        value = "bình_thường";
+                                    else if (v <= 6.9)
+                                        value = "tiền_đái_tháo_đường";
+                                    else
+                                        value = "đái_tháo_đường";
+
+                                    prepareLine = featureName + "_" + value + " " + prepareLine;
+                                }
+                                else
+                                {
+                                    lost = true;
+                                }
+                                continue;
+                            }
+
                             if (value.Length == 0) continue;
                             if (dic.ContainsKey(featureName))
                             {
@@ -448,6 +479,8 @@ namespace PreAsso.Bussiness
                     preparePrinter.Flush();
                     preparePrinter.Close();
                 }
+
+                BuildData(dataFolderPath, dataFileName);
             }
             catch (Exception e)
             {
@@ -455,9 +488,9 @@ namespace PreAsso.Bussiness
             }
         }
 
-        public void BuildData(string dataFolderPath, string dicFileName, string prepareFileName)
+        public void BuildData(string dataFolderPath, string datFileName)
         {
-            var dicContents = File.ReadAllLines(dataFolderPath + dicFileName).Where(l => l.Length > 0).ToList();
+            var dicContents = File.ReadAllLines(dataFolderPath + "/dictionary.txt").Where(l => l.Length > 0).ToList();
             var dic = new Dictionary<string, int>();
             foreach (var content in dicContents)
             {
@@ -465,9 +498,9 @@ namespace PreAsso.Bussiness
                 dic.Add(arr[0], int.Parse(arr[1]));
             }
 
-            using (var reader = new StreamReader(dataFolderPath + prepareFileName))
+            using (var reader = new StreamReader(dataFolderPath + "/prepare.txt"))
             {
-                var printer = new StreamWriter(dataFolderPath + prepareFileName.Replace("prepare", "data"));
+                var printer = new StreamWriter(datFileName);
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();

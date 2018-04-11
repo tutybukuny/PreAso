@@ -34,6 +34,7 @@
             this.cbbThres = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnPre = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtBrowse
@@ -93,11 +94,22 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Threshold:";
             // 
+            // btnPre
+            // 
+            this.btnPre.Location = new System.Drawing.Point(172, 127);
+            this.btnPre.Name = "btnPre";
+            this.btnPre.Size = new System.Drawing.Size(75, 23);
+            this.btnPre.TabIndex = 6;
+            this.btnPre.Text = "Preprocessing";
+            this.btnPre.UseVisualStyleBackColor = true;
+            this.btnPre.Click += new System.EventHandler(this.btnPre_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(529, 428);
+            this.Controls.Add(this.btnPre);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbbThres);
@@ -119,6 +131,7 @@
         private System.Windows.Forms.ComboBox cbbThres;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnPre;
     }
 }
 

@@ -15,7 +15,8 @@ namespace PreAsso.Bussiness
         /// <param name="excelFileName">excel data file</param>
         /// <param name="thres">threshold of ratio</param>
         /// <returns>return header of arff file</returns>
-        public static List<string> Processing(string excelFileName, double thres)
+        public static List<string> Processing(string dataFolderPath, string excelFileName, double thres,
+            bool forAr = true)
         {
             var features = new List<FeatureEntity>();
             var lines = new List<string>();
@@ -34,9 +35,6 @@ namespace PreAsso.Bussiness
             {
                 using (var pck = new ExcelPackage(new FileInfo(excelFileName)))
                 {
-//                    var sheet = pck.Workbook.Worksheets.Count > 1
-//                        ? pck.Workbook.Worksheets[2]
-//                        : pck.Workbook.Worksheets[1];
                     var sheet = pck.Workbook.Worksheets[1];
                     var rows = sheet.Dimension.Rows;
                     var cols = sheet.Dimension.Columns;
@@ -71,7 +69,11 @@ namespace PreAsso.Bussiness
                         "Nhịp thở (lần phút)",
                         "Ure",
                         "Creatinin",
-                        "Glucose máu"
+                        "Glucose máu",
+                        "Chỉ số Glucose máu (GM)",
+                        "Acid uric",
+                        "Huyết áp ngưỡng thấp (mmHg)",
+                        "Huyết áp ngưỡng cao (mmHg)"
                     };
                     var ignoreList = new List<string>
                     {
@@ -96,41 +98,84 @@ namespace PreAsso.Bussiness
                         "Địa chỉ"
                     };
 
-                    lines.Add("@RELATION\tmedical\r\n");
-                    lines.Add("@ATTRIBUTE\tTuổi\t{thanh_niên,trung_niên,lão_niên}");
-                    foreach (var feature in features)
+                    if (forAr)
                     {
-                        if (ignoreList.Contains(feature.Name)) continue;
-                        feature.PercentCalculating(rows - 1);
-                        if (feature.Percent < thres) continue;
-                        var line = "@ATTRIBUTE\t" + Regex.Replace(feature.Name.Replace(",", ""), "\\s+", "_") + "\t{";
-                        if (feature.Name == "Acid uric" || feature.Name == "Huyết áp ngưỡng thấp (mmHg)"
-                            || feature.Name == "Huyết áp ngưỡng cao (mmHg)")
+                        lines.Add("@RELATION\tmedical\r\n");
+                        lines.Add("@ATTRIBUTE\tTuổi\t{thanh_niên,trung_niên,lão_niên}");
+                        foreach (var feature in features)
                         {
-                            line += "bình_thường,cao";
-                        }
-                        else if (feature.Name == "Chỉ số Glucose máu (GM)")
-                        {
-                            line += "bình_thường,tiền_đái_tháo_đường,đái_tháo_đường";
-                        }
-                        else if (numberList.Contains(feature.Name))
-                        {
-                            line += "thấp,bình_thường,cao";
-                        }
-                        else
-                        {
-                            var count = 0;
-                            foreach (var value in feature.ValueList)
+                            if (ignoreList.Contains(feature.Name)) continue;
+                            feature.PercentCalculating(rows - 1);
+                            if (feature.Percent < thres) continue;
+                            var line = "@ATTRIBUTE\t" + Regex.Replace(feature.Name.Replace(",", ""), "\\s+", "_") +
+                                       "\t{";
+                            if (feature.Name == "Acid uric" || feature.Name == "Huyết áp ngưỡng thấp (mmHg)"
+                                || feature.Name == "Huyết áp ngưỡng cao (mmHg)")
                             {
-                                var v = Regex.Replace(value, "\\s+", "_");
-                                var index = findSameMeans(v, sameMeans);
-                                v = index != -1 ? means[index] : v;
-                                if (!line.Contains(v))
-                                    line += (count++ == 0 ? "" : ",") + v;
+                                line += "bình_thường,cao";
                             }
+                            else if (feature.Name == "Chỉ số Glucose máu (GM)")
+                            {
+                                line += "bình_thường,tiền_đái_tháo_đường,đái_tháo_đường";
+                            }
+                            else if (numberList.Contains(feature.Name))
+                            {
+                                line += "thấp,bình_thường,cao";
+                            }
+                            else
+                            {
+                                var count = 0;
+                                foreach (var value in feature.ValueList)
+                                {
+                                    var v = Regex.Replace(value, "\\s+", "_");
+                                    var index = findSameMeans(v, sameMeans);
+                                    v = index != -1 ? means[index] : v;
+                                    if (!line.Contains(v))
+                                        line += (count++ == 0 ? "" : ",") + v;
+                                }
+                            }
+                            line += "}";
+                            lines.Add(line);
                         }
-                        line += "}";
-                        lines.Add(line);
+                    }
+                    else
+                    {
+                        var index = 1;
+                        using (var dicPrinter = new StreamWriter(dataFolderPath + "/dictionary.txt"))
+                        {
+                            var featureNamePrinter = new StreamWriter(dataFolderPath + "/featureNamePrinter.txt");
+                            foreach (var feature in features)
+                            {
+                                if (ignoreList.Contains(feature.Name)) continue;
+                                feature.PercentCalculating(rows - 1);
+                                if (feature.Percent < thres) continue;
+                                featureNamePrinter.WriteLine(Regex.Replace(feature.Name, "\\s+", "_"));
+
+                                if (feature.Name == "Chỉ số Glucose máu (GM)")
+                                {
+                                    dicPrinter.WriteLine(Regex.Replace(feature.Name, "\\s+", "_") + "_bình_thường\t" +
+                                                         index++);
+                                    dicPrinter.WriteLine(Regex.Replace(feature.Name, "\\s+", "_") +
+                                                         "_tiền_đái_tháo_đường\t" + index++);
+                                    dicPrinter.WriteLine(Regex.Replace(feature.Name, "\\s+", "_") +
+                                                         "_đái_tháo_đường\t" + index++);
+                                }
+                                else if (numberList.Contains(feature.Name))
+                                {
+                                    dicPrinter.WriteLine(Regex.Replace(feature.Name, "\\s+", "_") + "\t" + index++);
+                                }
+                                else
+                                {
+                                    foreach (var value in feature.ValueList)
+                                        dicPrinter.WriteLine(Regex.Replace(feature.Name, "\\s+", "_") + "_" +
+                                                             Regex.Replace(value, "\\s+", "_") + "\t" + index++);
+                                }
+                                dicPrinter.WriteLine();
+                            }
+                            dicPrinter.Flush();
+                            featureNamePrinter.Flush();
+                            featureNamePrinter.Close();
+                        }
                     }
                 }
             }
